@@ -74,8 +74,10 @@ body{
     min-width: 340px;
     height: 80%;
     margin-bottom: 2rem;
-
  }
+#turn{
+    text-align: center;
+}
 
  #player-info{
     display: flex;
