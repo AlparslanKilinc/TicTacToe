@@ -87,12 +87,33 @@ body{
 
 
 /* All Buttons */ 
+button{
+   margin-top: 1rem;
+   font-size: large;
+   width: 100px;
+   height: 50px;
+   border-radius: 5px;
+   color: #3c403d;
+}
+
 button:hover{
    box-shadow: 3px 4px var(--black);
    cursor:pointer;
- }
-
- button:focus{
+}
+button:focus{
     background-color: transparent;
 }
-
+input{
+    -webkit-appearance: none;
+    font-size: large;
+    margin-top: 2rem;
+    appearance: none;
+    border: none;
+    border-bottom: 2px solid black;
+    background-color: transparent;
+    width: 200px;
+    height: 30px;
+}
+input:focus{
+    outline: 0;
+}

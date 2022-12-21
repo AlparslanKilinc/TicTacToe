@@ -2,9 +2,10 @@
  const Board = ( ()=> {
     /// Variables
     let board=document.querySelector('#board');
-    let boxes=board.querySelectorAll('div');
+    let restart=document.querySelector('#restart');
     let pattern=[];
-    /// Create Board
+    /// Create Board & Button
+    restart.addEventListener('click',()=>{clearBoard()});
     board.style.gridTemplateColumns= `repeat(${3}, 1fr)`;
     board.style.gridTemplateRows= `repeat(${3}, 1fr)`;
     let index=0;
@@ -14,16 +15,23 @@
         box.style.border='4px solid black';
         box.style.boxShadow='3px 5px black';
         board.insertAdjacentElement('beforeend',box);
-    } 
+    }
+    let boxes=board.querySelectorAll('div');
     /// Functions 
     const clearBoard = ()=>{
-        boxes.forEach((div) => div.remove());
+        boxes.forEach((div) => div.innerHTML="");
+        let name1=document.querySelector('#player-1');
+        let name2=document.querySelector('#player-2');
+        name1.value="";
+        name2.value="";
+
     }
     const addToBoard = (player,div,index) =>{
-        if(pattern.includes(index)) return;
+        if(pattern.includes(index)) return false;
         else{
             pattern.push(index);
             div.innerHTML=player.getValue();
+            return true;
         }
     }
     return{
@@ -55,6 +63,21 @@
     let player;
     let turn=document.querySelector('#turn');
 
+    let UpdateNames =()=>{
+
+        let name1=document.querySelector('#player-1');
+        name1.addEventListener('change',(event)=>{
+            player1.setName(event.target.value)
+            showTurn();
+        });
+
+        let name2=document.querySelector('#player-2');
+        name2.addEventListener('change',(event)=>{
+            player2.setName(event.target.value)
+            showTurn();
+        });
+    }
+    
     let changeTurn= () =>{
         player1.turn=!player1.turn;
         player2.turn=!player2.turn;
@@ -64,22 +87,24 @@
     let showTurn = ()=>{
         if(player1.turn){
             player=player1;
-            turn.innerHTML=`${player1.name}'s Turn`;
+            turn.innerHTML=`${player1.getName()}'s Turn`;
         } 
         else{
             player=player2;
-            turn.innerHTML=`${player2.name}'s Turn`;
+            turn.innerHTML=`${player2.getName()}'s Turn`;
         } 
     }
    
-    //// Adding a Move
-    let board = Board.board;
-    let boxes=board.querySelectorAll('div');
-    boxes.forEach((div,index) => div.addEventListener('click',()=>{
-    Board.addToBoard(player,div,index)
-    changeTurn();
-    }));
-    
+    let AddMoves = ()=>{
+        let board = Board.board;
+        let boxes=board.querySelectorAll('div');
+        boxes.forEach((div,index) => div.addEventListener('click',()=>{
+            let change= Board.addToBoard(player,div,index)
+            if(change)changeTurn();
+        }));
+    }
+
+    UpdateNames();
+    AddMoves();
     showTurn();
-    
  })(Board,player1,player2);
