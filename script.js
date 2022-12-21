@@ -58,6 +58,11 @@ const  Player = (name,value,turn) =>{
         }
         else{
             pattern.push(index);
+            div.style.display='flex';
+            div.style.justifyContent='center';
+            div.style.alignItems='center';
+            div.style.fontSize='42px';
+            div.style.fontWeight='Bold';
             div.innerHTML=player.getValue();
             if(pattern.length>=9){
                 resultScreen.style.display='flex';
