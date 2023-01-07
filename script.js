@@ -1,6 +1,5 @@
 const  Player = (name,value,turn) =>{
     let pattern = [];
-
     const getName  = ()=> name;
     const getValue = ()=> value;
     const getTurn = ()=> turn;
@@ -17,18 +16,15 @@ const  Player = (name,value,turn) =>{
  let player2 = Player('player2','O',false);
 
 /// Board Module 
- const Board = ( (player1,player2)=> {
+ const Board = ( ()=> {
     /// Variables
     let board=document.querySelector('#board');
-    let restart=document.querySelector('#restart');
-    let restart_main=document.querySelector('#restart-main');
     let resultScreen= document.querySelector('#result-screen');
     let resultText= document.querySelector('#result-text');
     let pattern=[];
+    const clearPattern = ()=>pattern=[];
 
     /// Create Board & Button
-    restart.addEventListener('click',()=>{clearBoard()});
-    restart_main.addEventListener('click',()=>{clearBoard()});
     board.style.gridTemplateColumns= `repeat(${3}, 1fr)`;
     board.style.gridTemplateRows= `repeat(${3}, 1fr)`;
     let index=0;
@@ -39,21 +35,11 @@ const  Player = (name,value,turn) =>{
         box.style.boxShadow='3px 5px black';
         board.insertAdjacentElement('beforeend',box);
     }
-    let boxes=board.querySelectorAll('div');
+
     /// Functions 
-    const clearBoard = ()=>{
-        boxes.forEach((div) => div.innerHTML="");
-        let name1=document.querySelector('#player-1');
-        let name2=document.querySelector('#player-2');
-        name1.value="";
-        name2.value="";
-        resultScreen.style.display='none';
-        pattern=[];
-        player1.clearPattern();
-        player2.clearPattern();
-    }
     const addToBoard = (player,div,index) =>{
         if(pattern.includes(index)){
+            console.log(false);
             return false;
         }
         else{
@@ -72,22 +58,41 @@ const  Player = (name,value,turn) =>{
         }
     }
     return{
-        clearBoard: clearBoard,
         addToBoard: addToBoard,
         pattern:pattern,
         board:board,
+        clearPattern:clearPattern
     }
 
- })(player1,player2);
+ })();
 
 
  const GamePlay = ((Board,player1,player2) =>{
     let player;
+    let board = Board.board;
+    let boxes=board.querySelectorAll('div');
     let turn=document.querySelector('#turn');
+    let resultScreen= document.querySelector('#result-screen');
+    let resultText= document.querySelector('#result-text');
+    let restart=document.querySelector('#restart');
+    let restart_main=document.querySelector('#restart-main');
+
+    restart.addEventListener('click',()=>{clearBoard()});
+    restart_main.addEventListener('click',()=>{clearBoard()});
+
+    const clearBoard = ()=>{
+        boxes.forEach((div) => div.innerHTML="");
+        player1.turn=true;
+        player2.turn=false;
+        resultScreen.style.display='none';
+        Board.clearPattern();
+        player1.clearPattern();
+        player2.clearPattern();
+        showTurn();
+    }
     
 
     let UpdateNames =()=>{
-
         let name1=document.querySelector('#player-1');
         name1.addEventListener('change',(event)=>{
             player1.setName(event.target.value)
@@ -119,10 +124,6 @@ const  Player = (name,value,turn) =>{
     }
    
     let AddMoves = ()=>{
-        let board = Board.board;
-        let boxes=board.querySelectorAll('div');
-        let resultScreen= document.querySelector('#result-screen');
-        let resultText= document.querySelector('#result-text');
         boxes.forEach((div,index) => div.addEventListener('click',()=>{
             let change= Board.addToBoard(player,div,index)
             if(change){
